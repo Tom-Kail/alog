@@ -1,7 +1,11 @@
 // Package alog is a tiny wrap of log module of beego
 package alog
 
-import "github.com/astaxie/beego/logs"
+import (
+	"strings"
+
+	"github.com/astaxie/beego/logs"
+)
 
 // Log global var
 var Log = logs.NewLogger(10000)
@@ -25,40 +29,44 @@ func init() {
 
 // Debug ...
 func Debug(v ...interface{}) {
-	Log.Debug("%v", v)
+	Log.Debug(generateFmtStr(len(v)), v...)
 }
 
 // Info ...
 func Info(v ...interface{}) {
-	Log.Info("%v", v)
+	Log.Info(generateFmtStr(len(v)), v...)
 }
 
 // Notice ...
 func Notice(v ...interface{}) {
-	Log.Notice("%v", v)
+	Log.Notice(generateFmtStr(len(v)), v...)
 }
 
 // Warning ...
 func Warning(v ...interface{}) {
-	Log.Warning("%v", v)
+	Log.Warning(generateFmtStr(len(v)), v...)
 }
 
 // Error ...
 func Error(v ...interface{}) {
-	Log.Error("%v", v)
+	Log.Error(generateFmtStr(len(v)), v...)
 }
 
 // Critical ...
 func Critical(v ...interface{}) {
-	Log.Critical("%v", v)
+	Log.Critical(generateFmtStr(len(v)), v...)
 }
 
 // Alert ...
 func Alert(v ...interface{}) {
-	Log.Alert("%v", v)
+	Log.Alert(generateFmtStr(len(v)), v...)
 }
 
 // Emergency ...
 func Emergency(v ...interface{}) {
-	Log.Emergency("%v", v)
+	Log.Emergency(generateFmtStr(len(v)), v...)
+}
+
+func generateFmtStr(n int) string {
+	return strings.Repeat("%v ", n)
 }
