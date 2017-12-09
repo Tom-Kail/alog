@@ -4,69 +4,70 @@ package alog
 import (
 	"strings"
 
-	"github.com/astaxie/beego/logs"
+	"fmt"
+	"path"
+	"runtime"
+	"time"
 )
 
-// Log global var
-var Log = logs.NewLogger(10000)
-
-func init() {
-	Log.SetLogger("console", "")
-	Log.EnableFuncCallDepth(true)
-	Log.SetLogFuncCallDepth(3)
-	Log.SetLevel(logs.LevelDebug)
-
-}
-
-//	LevelEmergency
-//	LevelAlert
-//	LevelCritical
-//	LevelError
-//	LevelWarning
-//	LevelNotice
-//	LevelInformational
-//	LevelDebug
+const depth = 1
 
 // Debug ...
 func Debug(v ...interface{}) {
-	Log.Debug(generateFmtStr(len(v)), v...)
+	_, file, line, _ := runtime.Caller(depth)
+	fmt.Printf(generateFmtStr("D", file, line, len(v)), v...)
 }
 
 // Info ...
 func Info(v ...interface{}) {
-	Log.Info(generateFmtStr(len(v)), v...)
+	_, file, line, _ := runtime.Caller(depth)
+	fmt.Printf(generateFmtStr("I", file, line, len(v)), v...)
 }
 
 // Notice ...
 func Notice(v ...interface{}) {
-	Log.Notice(generateFmtStr(len(v)), v...)
+	_, file, line, _ := runtime.Caller(depth)
+	fmt.Printf(generateFmtStr("N", file, line, len(v)), v...)
 }
 
 // Warning ...
 func Warning(v ...interface{}) {
-	Log.Warning(generateFmtStr(len(v)), v...)
+	_, file, line, _ := runtime.Caller(depth)
+	fmt.Printf(generateFmtStr("W", file, line, len(v)), v...)
 }
 
 // Error ...
 func Error(v ...interface{}) {
-	Log.Error(generateFmtStr(len(v)), v...)
+	_, file, line, _ := runtime.Caller(depth)
+	fmt.Printf(generateFmtStr("E", file, line, len(v)), v...)
 }
 
 // Critical ...
 func Critical(v ...interface{}) {
-	Log.Critical(generateFmtStr(len(v)), v...)
+	_, file, line, _ := runtime.Caller(depth)
+	fmt.Printf(generateFmtStr("C", file, line, len(v)), v...)
 }
 
 // Alert ...
 func Alert(v ...interface{}) {
-	Log.Alert(generateFmtStr(len(v)), v...)
+	_, file, line, _ := runtime.Caller(depth)
+	fmt.Printf(generateFmtStr("A", file, line, len(v)), v...)
 }
 
 // Emergency ...
 func Emergency(v ...interface{}) {
-	Log.Emergency(generateFmtStr(len(v)), v...)
+	_, file, line, _ := runtime.Caller(depth)
+	fmt.Printf(generateFmtStr("M", file, line, len(v)), v...)
 }
 
-func generateFmtStr(n int) string {
-	return strings.Repeat("%v ", n)
+//2017/12/09 13:30:42.718 [I] [router.go:266] D:\gopath\src\zcm\controllers\controllers_cg no changed
+
+func generateFmtStr(levelFlag, file string, line, n int) string {
+	_, filename := path.Split(file)
+	dir := path.Dir(file)
+	lastDir := path.Base(dir)
+
+	formatStr := strings.Repeat("%v ", n)
+	formatStr = time.Now().Format("2006/01/02 15:04:05.999") + fmt.Sprintf(" [%s] [%s/%s:%d] ", levelFlag, lastDir, filename, line) + formatStr + "\n"
+	return formatStr
 }
