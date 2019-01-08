@@ -60,7 +60,6 @@ func Emergency(v ...interface{}) {
 	fmt.Printf(generateFmtStr("M", file, line, len(v)), v...)
 }
 
-//2017/12/09 13:30:42.718 [I] [router.go:266] D:\gopath\src\zcm\controllers\controllers_cg no changed
 
 func generateFmtStr(levelFlag, file string, line, n int) string {
 	_, filename := path.Split(file)
